@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create:*)",
+      "Bash(export PATH=\"/usr/local/bin:/opt/homebrew/bin:$HOME/.nvm/default/bin:$HOME/.local/bin:$PATH\")",
+      "Bash(export PATH=\"/usr/local/bin:$PATH\")",
+      "Bash(npm --version)",
+      "Bash(export PATH=/usr/local/bin:$PATH)",
+      "Bash(npx --version)",
+      "Bash(npm install:*)",
+      "Bash(npx create-vite@4 certify-ai --template react-ts)",
+      "Bash(npx tailwindcss:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(npx tsc:*)",
+      "Bash(node -e \"const l = require\\(''lucide-react''\\); console.log\\(Object.keys\\(l\\).filter\\(k => k.toLowerCase\\(\\).includes\\(''git''\\) || k.toLowerCase\\(\\).includes\\(''twit''\\)\\).join\\('', ''\\)\\)\")",
+      "Bash(npm run:*)",
+      "Bash(curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh)",
+      "Bash(bash)",
+      "mcp__Claude_Preview__preview_start"
+    ]
+  }
+}
