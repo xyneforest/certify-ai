@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, LogOut } from 'lucide-react';
+import { Menu, X, LogOut, Home, BookOpen, ClipboardList, Newspaper } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 
 export function Navbar() {
@@ -10,10 +10,10 @@ export function Navbar() {
   const location = useLocation();
 
   const links = [
-    { to: '/', label: 'Home' },
-    { to: '/courses', label: 'Course' },
-    { to: '/exams', label: 'Exam' },
-    { to: '/fa', label: 'F&A' },
+    { to: '/', label: 'Home', icon: Home },
+    { to: '/courses', label: 'Courses', icon: BookOpen },
+    { to: '/exams', label: 'Exam', icon: ClipboardList },
+    { to: '/fa', label: 'F&A', icon: Newspaper },
   ];
 
   const isActive = (path: string) => {
@@ -24,28 +24,32 @@ export function Navbar() {
   return (
     <nav className="sticky top-0 z-50 bg-[#faf8f4] border-b border-surface-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-[60px]">
+        <div className="flex items-center justify-between h-[68px]">
           <Link to="/" className="flex items-center group">
-            <span className="font-serif text-xl font-bold text-surface-900">
+            <span className="font-serif text-2xl font-bold text-surface-900">
               Certify<span className="text-brand-400">AI</span>
             </span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-1">
-            {links.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className={`
-                  px-4 py-2 text-[0.875rem] font-medium transition-all duration-200 border-b-2
-                  ${isActive(link.to)
-                    ? 'text-surface-900 border-brand-400'
-                    : 'text-surface-500 border-transparent hover:text-surface-900'}
-                `}
-              >
-                {link.label}
-              </Link>
-            ))}
+          <div className="hidden md:flex items-center gap-6">
+            {links.map((link) => {
+              const Icon = link.icon;
+              return (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  className={`
+                    flex items-center gap-2 py-2 text-base font-bold tracking-wide transition-all duration-200 border-b-2
+                    ${isActive(link.to)
+                      ? 'text-surface-900 border-brand-400'
+                      : 'text-surface-900 border-transparent hover:text-brand-400 hover:border-brand-400'}
+                  `}
+                >
+                  <Icon size={20} strokeWidth={2.2} />
+                  {link.label}
+                </Link>
+              );
+            })}
           </div>
 
           <div className="hidden md:flex items-center gap-3">
@@ -95,21 +99,25 @@ export function Navbar() {
             className="md:hidden border-t border-surface-300 bg-[#faf8f4]"
           >
             <div className="px-4 py-3 space-y-1">
-              {links.map((link) => (
-                <Link
-                  key={link.to}
-                  to={link.to}
-                  onClick={() => setMobileOpen(false)}
-                  className={`
-                    block px-3 py-2.5 text-[0.875rem] font-medium transition-all rounded-lg
-                    ${isActive(link.to)
-                      ? 'text-surface-900 bg-surface-100 border-l-2 border-brand-400'
-                      : 'text-surface-500 hover:text-surface-900 hover:bg-surface-100'}
-                  `}
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {links.map((link) => {
+                const Icon = link.icon;
+                return (
+                  <Link
+                    key={link.to}
+                    to={link.to}
+                    onClick={() => setMobileOpen(false)}
+                    className={`
+                      flex items-center gap-3 px-3 py-2.5 text-base font-bold transition-all rounded-lg
+                      ${isActive(link.to)
+                        ? 'text-surface-900 bg-surface-100 border-l-2 border-brand-400'
+                        : 'text-surface-900 hover:bg-surface-100'}
+                    `}
+                  >
+                    <Icon size={20} strokeWidth={2.2} />
+                    {link.label}
+                  </Link>
+                );
+              })}
               <div className="pt-2 border-t border-surface-300">
                 {isAuthenticated ? (
                   <>
