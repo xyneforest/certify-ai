@@ -24,14 +24,14 @@ export function Navbar() {
   return (
     <nav className="sticky top-0 z-50 bg-[#faf8f4] border-b border-surface-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-[68px]">
+        <div className="flex items-center justify-between h-[76px]">
           <Link to="/" className="flex items-center group">
-            <span className="font-serif text-2xl font-bold text-surface-900">
+            <span className="font-serif text-3xl font-bold text-surface-900">
               Certify<span className="text-brand-400">AI</span>
             </span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-8">
             {links.map((link) => {
               const Icon = link.icon;
               return (
@@ -39,13 +39,13 @@ export function Navbar() {
                   key={link.to}
                   to={link.to}
                   className={`
-                    flex items-center gap-2 py-2 text-base font-bold tracking-wide transition-all duration-200 border-b-2
+                    flex items-center gap-2.5 py-2 text-xl font-bold tracking-wide transition-all duration-200 border-b-3
                     ${isActive(link.to)
                       ? 'text-surface-900 border-brand-400'
                       : 'text-surface-900 border-transparent hover:text-brand-400 hover:border-brand-400'}
                   `}
                 >
-                  <Icon size={20} strokeWidth={2.2} />
+                  <Icon size={24} strokeWidth={2.2} />
                   {link.label}
                 </Link>
               );
@@ -57,9 +57,9 @@ export function Navbar() {
               <>
                 <Link
                   to="/dashboard"
-                  className="flex items-center gap-2 px-3 py-2 text-[0.875rem] font-medium text-surface-600 hover:text-surface-900 transition-all"
+                  className="flex items-center gap-2 px-3 py-2 text-lg font-bold text-surface-700 hover:text-surface-900 transition-all"
                 >
-                  <div className="w-7 h-7 rounded-full bg-brand-400 flex items-center justify-center text-white text-xs font-bold">
+                  <div className="w-8 h-8 rounded-full bg-brand-400 flex items-center justify-center text-white text-sm font-bold">
                     {user?.name?.charAt(0)?.toUpperCase() || 'U'}
                   </div>
                   {user?.name}
@@ -74,7 +74,7 @@ export function Navbar() {
             ) : (
               <Link
                 to="/login"
-                className="text-[0.875rem] font-medium text-surface-500 hover:text-surface-900 transition-colors"
+                className="text-lg font-bold text-surface-700 hover:text-surface-900 transition-colors"
               >
                 Sign In
               </Link>
