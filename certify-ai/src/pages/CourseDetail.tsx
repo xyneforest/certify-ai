@@ -1,15 +1,8 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Clock, Users, Star, ArrowLeft, BookOpen, Target, UserCheck, Play } from 'lucide-react';
+import { Clock, Users, Star, ArrowLeft, BookOpen, User, CheckCircle } from 'lucide-react';
 import { useCertStore } from '../store/certStore';
 import { useAuthStore } from '../store/authStore';
-import { CATEGORIES, DIFFICULTIES } from '../types';
-import { sampleQuestions } from '../data/mockData';
-import { Button, Badge } from '../components/ui';
-import { Tabs } from '../components/ui/Tabs';
-import { ChapterList } from '../components/course/ChapterList';
-import { AnnouncementList } from '../components/course/AnnouncementList';
-import { QuizSection } from '../components/course/QuizSection';
+import { CATEGORIES } from '../types';
 
 export function CourseDetail() {
   const { id } = useParams<{ id: string }>();
@@ -20,168 +13,326 @@ export function CourseDetail() {
 
   if (!course) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-20 text-center">
-        <h1 className="text-2xl font-bold text-surface-900 mb-4">Course not found</h1>
-        <Link to="/courses">
-          <Button variant="secondary">Browse Courses</Button>
+      <div
+        className="max-w-7xl mx-auto px-4 py-20 text-center"
+        style={{ backgroundColor: '#faf8f4', minHeight: '100vh' }}
+      >
+        <h1
+          className="text-2xl font-bold mb-4"
+          style={{ color: '#0f0f0f', fontFamily: 'Georgia, serif' }}
+        >
+          Course not found
+        </h1>
+        <Link
+          to="/courses"
+          className="inline-block px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors"
+          style={{ backgroundColor: '#f2ede4', color: '#0f0f0f' }}
+        >
+          Browse Courses
         </Link>
       </div>
     );
   }
 
   const category = CATEGORIES[course.category];
-  const difficulty = DIFFICULTIES[course.difficulty];
-  const questions = sampleQuestions[course.id] || [];
 
-  const tabs = [
-    { id: 'intro', label: 'Introduction', icon: <BookOpen size={15} /> },
-    { id: 'chapters', label: 'Chapters', icon: <Target size={15} /> },
-    { id: 'announcements', label: 'Announcements', icon: <UserCheck size={15} /> },
-    { id: 'quiz', label: 'Quiz / Test', icon: <Play size={15} /> },
-  ];
+  // Flatten all lessons across modules for the syllabus
+  const allLessons = course.modules.flatMap((m) =>
+    m.lessons.map((l) => ({ ...l, moduleTitle: m.title }))
+  );
+  const totalLessons = allLessons.length;
+  const completedLessons = allLessons.filter((l) => l.completed).length;
+  const progressPercent =
+    totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
 
   return (
-    <div>
-      {/* Hero */}
-      <div className="relative h-56 sm:h-72 overflow-hidden">
-        <img src={course.image} alt={course.title} className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-10">
-          <div className="max-w-7xl mx-auto">
-            <Link to="/courses" className="inline-flex items-center gap-1 text-white/70 hover:text-white text-sm mb-3 transition-colors">
-              <ArrowLeft size={14} />
-              All Courses
-            </Link>
-            <div className="flex items-center gap-2 mb-2">
-              <span className={`px-2.5 py-1 rounded-lg text-xs font-medium ${category.color}`}>
-                {category.icon} {category.label}
-              </span>
-              <Badge className={difficulty.color}>{difficulty.label}</Badge>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-white mb-1">{course.title}</h1>
-            <p className="text-white/60 text-sm">Instructor: {course.instructor}</p>
+    <div style={{ backgroundColor: '#faf8f4', minHeight: '100vh' }}>
+      {/* Dark Hero */}
+      <section style={{ backgroundColor: '#0f0f0f' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+          {/* Back link */}
+          <Link
+            to="/courses"
+            className="inline-flex items-center gap-1.5 text-sm mb-6 transition-colors"
+            style={{ color: 'rgba(255,255,255,0.5)' }}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.color = 'rgba(255,255,255,0.8)')
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.color = 'rgba(255,255,255,0.5)')
+            }
+          >
+            <ArrowLeft size={14} />
+            Back to Courses
+          </Link>
+
+          {/* Category label */}
+          <p
+            className="text-[11px] font-semibold uppercase tracking-wider mb-2"
+            style={{ color: '#e8a020' }}
+          >
+            {category.icon} {category.label}
+          </p>
+
+          {/* Title */}
+          <h1
+            className="text-3xl sm:text-4xl font-bold mb-3"
+            style={{ color: '#faf8f4', fontFamily: 'Georgia, serif' }}
+          >
+            {course.title}
+          </h1>
+
+          {/* Description */}
+          <p
+            className="text-sm sm:text-base leading-relaxed max-w-2xl mb-6"
+            style={{ color: 'rgba(255,255,255,0.7)' }}
+          >
+            {course.shortDescription}
+          </p>
+
+          {/* Meta row */}
+          <div
+            className="flex flex-wrap items-center gap-5 text-sm"
+            style={{ color: 'rgba(255,255,255,0.5)' }}
+          >
+            <span className="flex items-center gap-1.5">
+              <User size={14} />
+              {course.instructor}
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Clock size={14} />
+              {course.duration}h
+            </span>
+            <span className="flex items-center gap-1.5">
+              <BookOpen size={14} />
+              {totalLessons} lessons
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Star size={14} fill="#e8a020" stroke="#e8a020" />
+              {course.rating}
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Users size={14} />
+              {course.enrolledCount.toLocaleString()} enrolled
+            </span>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Main Content */}
-          <div className="lg:col-span-3">
-            <Tabs tabs={tabs} defaultTab="intro">
-              {(activeTab) => (
-                <>
-                  {activeTab === 'intro' && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8">
-                      {/* Overview */}
-                      <div>
-                        <h2 className="text-lg font-semibold text-surface-900 mb-3">Course Overview</h2>
-                        <p className="text-surface-600 leading-relaxed">{course.description}</p>
-                      </div>
+      {/* Tags */}
+      {course.tags.length > 0 && (
+        <div
+          className="border-b"
+          style={{ borderColor: '#ddd8cc' }}
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div className="flex flex-wrap gap-2">
+              {course.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="px-3 py-1 rounded-full text-xs font-medium"
+                  style={{ backgroundColor: '#f2ede4', color: '#8a8070' }}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
-                      {/* Learning Objectives */}
-                      <div>
-                        <h2 className="text-lg font-semibold text-surface-900 mb-3">What You'll Learn</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                          {course.learningObjectives.map((obj, i) => (
-                            <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-emerald-50 border border-emerald-100">
-                              <div className="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                                </svg>
-                              </div>
-                              <span className="text-sm text-surface-700">{obj}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
+      {/* Two-column body */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Left: Syllabus */}
+          <div className="flex-1 min-w-0">
+            <div
+              className="rounded-xl overflow-hidden"
+              style={{ backgroundColor: '#ffffff', border: '1px solid #ddd8cc' }}
+            >
+              {/* Header */}
+              <div
+                className="px-6 py-4 border-b"
+                style={{ borderColor: '#ddd8cc' }}
+              >
+                <h2
+                  className="text-lg font-bold"
+                  style={{ color: '#0f0f0f', fontFamily: 'Georgia, serif' }}
+                >
+                  Course Outline{' '}
+                  <span
+                    className="font-normal text-sm"
+                    style={{ color: '#8a8070' }}
+                  >
+                    &middot; {course.modules.length} sections
+                  </span>
+                </h2>
+              </div>
 
-                      {/* Target Audience */}
-                      <div>
-                        <h2 className="text-lg font-semibold text-surface-900 mb-3">Who This Course is For</h2>
-                        <ul className="space-y-2">
-                          {course.targetAudience.map((audience, i) => (
-                            <li key={i} className="flex items-center gap-2 text-sm text-surface-600">
-                              <UserCheck size={15} className="text-brand-500 flex-shrink-0" />
-                              {audience}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+              {/* Lessons list */}
+              <div>
+                {course.modules.map((mod) => (
+                  <div key={mod.id}>
+                    {/* Module header */}
+                    <div
+                      className="px-6 py-3 text-xs font-semibold uppercase tracking-wider"
+                      style={{
+                        backgroundColor: '#faf8f4',
+                        color: '#8a8070',
+                        borderBottom: '1px solid #ddd8cc',
+                      }}
+                    >
+                      {mod.title}
+                    </div>
 
-                      {/* Tags */}
-                      <div>
-                        <h2 className="text-lg font-semibold text-surface-900 mb-3">Topics Covered</h2>
-                        <div className="flex flex-wrap gap-2">
-                          {course.tags.map((tag) => (
-                            <Badge key={tag} size="md">{tag}</Badge>
-                          ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
+                    {/* Lessons */}
+                    {mod.lessons.map((lesson) => {
+                      const globalIdx =
+                        allLessons.findIndex((l) => l.id === lesson.id) + 1;
+                      return (
+                        <button
+                          key={lesson.id}
+                          onClick={() =>
+                            navigate(
+                              `/courses/${course.id}/learn?lesson=${lesson.id}`
+                            )
+                          }
+                          className="w-full flex items-center gap-3 px-6 py-3.5 text-left transition-colors border-b"
+                          style={{ borderColor: '#f2ede4' }}
+                          onMouseEnter={(e) =>
+                            (e.currentTarget.style.backgroundColor = '#f2ede4')
+                          }
+                          onMouseLeave={(e) =>
+                            (e.currentTarget.style.backgroundColor =
+                              'transparent')
+                          }
+                        >
+                          {/* Status icon */}
+                          {lesson.completed ? (
+                            <CheckCircle
+                              size={20}
+                              style={{ color: '#6b8f71' }}
+                              className="flex-shrink-0"
+                            />
+                          ) : (
+                            <span
+                              className="w-5 h-5 rounded-full flex items-center justify-center text-[11px] font-semibold flex-shrink-0"
+                              style={{
+                                border: '1.5px solid #ddd8cc',
+                                color: '#8a8070',
+                              }}
+                            >
+                              {globalIdx}
+                            </span>
+                          )}
 
-                  {activeTab === 'chapters' && (
-                    <ChapterList modules={course.modules} courseId={course.id} />
-                  )}
+                          {/* Title */}
+                          <span
+                            className="flex-1 text-sm"
+                            style={{ color: '#0f0f0f' }}
+                          >
+                            {lesson.title}
+                          </span>
 
-                  {activeTab === 'announcements' && (
-                    <AnnouncementList announcements={course.announcements} />
-                  )}
-
-                  {activeTab === 'quiz' && (
-                    <QuizSection questions={questions} passingScore={course.passingScore} />
-                  )}
-                </>
-              )}
-            </Tabs>
+                          {/* Duration */}
+                          <span
+                            className="text-xs flex-shrink-0"
+                            style={{
+                              color: '#8a8070',
+                              fontFamily: 'ui-monospace, monospace',
+                            }}
+                          >
+                            {lesson.duration}m
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <div className="sticky top-24 bg-white rounded-2xl border border-surface-100 shadow-card p-5 space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <div className="text-center p-3 rounded-xl bg-surface-50">
-                  <Clock size={18} className="mx-auto mb-1 text-surface-400" />
-                  <div className="text-sm font-semibold text-surface-900">{course.duration}m</div>
-                  <div className="text-xs text-surface-400">Duration</div>
+          {/* Right: Sidebar */}
+          <div className="w-full lg:w-[320px] flex-shrink-0">
+            <div
+              className="sticky top-20 rounded-xl p-6 space-y-5"
+              style={{ backgroundColor: '#ffffff', border: '1px solid #ddd8cc' }}
+            >
+              {/* Price */}
+              <div>
+                <span
+                  className="text-2xl font-bold"
+                  style={{
+                    color: course.price === 0 ? '#6b8f71' : '#0f0f0f',
+                    fontFamily: 'Georgia, serif',
+                  }}
+                >
+                  {course.price === 0 ? 'Free' : `$${course.price}`}
+                </span>
+              </div>
+
+              {/* Progress */}
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-xs font-medium" style={{ color: '#8a8070' }}>
+                    Progress
+                  </span>
+                  <span className="text-xs font-semibold" style={{ color: '#0f0f0f' }}>
+                    {progressPercent}% Complete
+                  </span>
                 </div>
-                <div className="text-center p-3 rounded-xl bg-surface-50">
-                  <BookOpen size={18} className="mx-auto mb-1 text-surface-400" />
-                  <div className="text-sm font-semibold text-surface-900">{course.modules.length}</div>
-                  <div className="text-xs text-surface-400">Modules</div>
-                </div>
-                <div className="text-center p-3 rounded-xl bg-surface-50">
-                  <Star size={18} className="mx-auto mb-1 text-amber-400" />
-                  <div className="text-sm font-semibold text-surface-900">{course.rating}</div>
-                  <div className="text-xs text-surface-400">Rating</div>
-                </div>
-                <div className="text-center p-3 rounded-xl bg-surface-50">
-                  <Users size={18} className="mx-auto mb-1 text-surface-400" />
-                  <div className="text-sm font-semibold text-surface-900">{course.enrolledCount.toLocaleString()}</div>
-                  <div className="text-xs text-surface-400">Enrolled</div>
+                <div
+                  className="w-full h-2 rounded-full overflow-hidden"
+                  style={{ backgroundColor: '#f2ede4' }}
+                >
+                  <div
+                    className="h-full rounded-full transition-all duration-500"
+                    style={{
+                      width: `${progressPercent}%`,
+                      backgroundColor: '#e8a020',
+                    }}
+                  />
                 </div>
               </div>
 
-              <div className="text-center">
-                <span className="text-2xl font-bold text-surface-900">Free</span>
-              </div>
-
-              <Button
-                className="w-full"
-                size="lg"
+              {/* CTA Button */}
+              <button
                 onClick={() => {
-                  if (!isAuthenticated) navigate('/login?redirect=/courses/' + course.id + '/learn');
+                  if (!isAuthenticated)
+                    navigate('/login?redirect=/courses/' + course.id + '/learn');
                   else navigate(`/courses/${course.id}/learn`);
                 }}
+                className="w-full py-3 rounded-lg text-sm font-semibold transition-colors"
+                style={{ backgroundColor: '#e8a020', color: '#0f0f0f' }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.backgroundColor = '#b87c10')
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.backgroundColor = '#e8a020')
+                }
               >
-                <Play size={16} className="mr-2" />
-                Start Learning
-              </Button>
+                Continue Learning &rarr;
+              </button>
 
-              <p className="text-xs text-surface-400 text-center">
-                Pass score: {course.passingScore}% &middot; {course.questionCount} exam questions
-              </p>
+              {/* Features */}
+              <ul className="space-y-3 pt-2">
+                {[
+                  { icon: '\u{267E}\uFE0F', text: 'Lifetime Access' },
+                  { icon: '\u{1F4F1}', text: 'Mobile & Desktop' },
+                  { icon: '\u{1F3C6}', text: 'Certificate on Completion' },
+                  { icon: '\u{1F465}', text: 'Community Access' },
+                ].map((f) => (
+                  <li
+                    key={f.text}
+                    className="flex items-center gap-2.5 text-sm"
+                    style={{ color: '#0f0f0f' }}
+                  >
+                    <span className="text-base">{f.icon}</span>
+                    {f.text}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>

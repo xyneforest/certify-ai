@@ -1,19 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Noto+Serif+SC:wght@400;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  * { @apply border-surface-200; }
-  body { @apply bg-white text-surface-900 font-sans antialiased; }
+  * { @apply border-surface-300; }
+  body { @apply bg-surface-50 text-surface-900 font-sans antialiased; }
 }
 
 @layer components {
-  .glass { @apply bg-white/80 backdrop-blur-xl border border-white/20; }
-  .gradient-brand { @apply bg-gradient-to-br from-brand-600 via-brand-700 to-brand-900; }
-  .gradient-subtle { @apply bg-gradient-to-br from-brand-50 via-white to-brand-50; }
-  .text-gradient { @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-600 to-brand-800; }
+  .glass { @apply bg-[#faf8f4]/80 backdrop-blur-xl border border-surface-300/20; }
+  .gradient-brand { @apply bg-gradient-to-br from-brand-400 via-brand-500 to-brand-700; }
+  .gradient-subtle { @apply bg-gradient-to-br from-surface-50 via-white to-surface-100; }
+  .text-gradient { @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-400 to-brand-600; }
 }
 
 @layer utilities {
@@ -26,4 +26,5 @@
   .animate-stagger > *:nth-child(4) { animation-delay: 240ms; }
   .animate-stagger > *:nth-child(5) { animation-delay: 320ms; }
   .animate-stagger > *:nth-child(6) { animation-delay: 400ms; }
+  .bg-paper { background-color: #faf8f4; }
 }

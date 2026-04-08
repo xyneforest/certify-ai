@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Clock, AlertTriangle, ArrowLeft, FileQuestion } from 'lucide-react';
+import { Clock, AlertTriangle, ArrowLeft } from 'lucide-react';
 import { useExamStore } from '../store/examStore';
 import { useAuthStore } from '../store/authStore';
 import { exams, sampleQuestions } from '../data/mockData';
 import { ExamQuestion } from '../components/exam/ExamQuestion';
 import { ExamProgress } from '../components/exam/ExamProgress';
 import { ExamResult as ExamResultComponent } from '../components/exam/ExamResult';
-import { Button, Modal } from '../components/ui';
+import { Modal } from '../components/ui';
 import { DIFFICULTIES } from '../types';
 
 export function ExamDetail() {
@@ -33,17 +32,11 @@ export function ExamDetail() {
       return;
     }
     if (examId) {
-      // Load questions for this exam — use examId key or fall back to courseId
       const qs = sampleQuestions[examId] || sampleQuestions[exam?.courseId || ''] || [];
       if (qs.length > 0) {
-        // Manually set questions via the store
         useExamStore.setState({
-          questions: qs,
-          currentQuestionIndex: 0,
-          answers: {},
-          isStarted: false,
-          isCompleted: false,
-          result: null,
+          questions: qs, currentQuestionIndex: 0, answers: {},
+          isStarted: false, isCompleted: false, result: null,
         });
       } else {
         loadQuestions(exam?.courseId || '');
@@ -60,9 +53,11 @@ export function ExamDetail() {
 
   if (!exam) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-20 text-center">
-        <h1 className="text-2xl font-bold text-surface-900 mb-4">Exam not found</h1>
-        <Link to="/exams"><Button variant="secondary">Browse Exams</Button></Link>
+      <div className="max-w-7xl mx-auto px-4 py-20 text-center" style={{ backgroundColor: '#faf8f4', minHeight: '100vh' }}>
+        <h1 className="text-2xl font-bold mb-4" style={{ color: '#0f0f0f', fontFamily: 'Georgia, serif' }}>Exam not found</h1>
+        <Link to="/exams" className="px-5 py-2.5 rounded-lg text-sm font-semibold" style={{ backgroundColor: '#f2ede4', color: '#0f0f0f' }}>
+          Browse Exams
+        </Link>
       </div>
     );
   }
@@ -80,7 +75,7 @@ export function ExamDetail() {
   // Result screen
   if (isCompleted && result) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10" style={{ backgroundColor: '#faf8f4', minHeight: '100vh' }}>
         <ExamResultComponent
           result={result}
           certTitle={exam.title}
@@ -101,139 +96,204 @@ export function ExamDetail() {
   // Start screen
   if (!isStarted) {
     return (
-      <div className="max-w-2xl mx-auto px-4 py-16">
-        <Link to="/exams" className="inline-flex items-center gap-1 text-surface-500 hover:text-surface-700 text-sm mb-6 transition-colors">
-          <ArrowLeft size={14} />
-          Back to Exams
-        </Link>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-2xl border border-surface-100 shadow-card p-8 text-center"
-        >
-          <div className="w-16 h-16 mx-auto rounded-2xl gradient-brand flex items-center justify-center mb-5">
-            <FileQuestion size={28} className="text-white" />
-          </div>
-          <h1 className="text-2xl font-bold text-surface-900 mb-1">{exam.title}</h1>
-          <p className="text-surface-400 text-sm mb-1">Course: {exam.courseTitle}</p>
-          <div className="flex justify-center mb-6">
-            <span className={`px-2.5 py-1 rounded-lg text-xs font-medium ${difficulty.color}`}>
-              {difficulty.label}
-            </span>
-          </div>
+      <div style={{ backgroundColor: '#faf8f4', minHeight: '100vh' }}>
+        <div className="max-w-2xl mx-auto px-4 py-16">
+          <Link
+            to="/exams"
+            className="inline-flex items-center gap-1.5 text-sm mb-6 transition-colors"
+            style={{ color: '#8a8070' }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = '#0f0f0f')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = '#8a8070')}
+          >
+            <ArrowLeft size={14} />
+            Back to Exams
+          </Link>
 
-          <div className="grid grid-cols-3 gap-4 mb-8 max-w-sm mx-auto">
-            <div className="p-3 rounded-xl bg-surface-50">
-              <div className="text-lg font-bold text-surface-900">{questions.length}</div>
-              <div className="text-xs text-surface-400">Questions</div>
+          <div
+            className="rounded-2xl p-8 text-center"
+            style={{ backgroundColor: '#ffffff', border: '1px solid #ddd8cc', boxShadow: '0 2px 12px rgba(15,15,15,0.08)' }}
+          >
+            <div className="text-4xl mb-4">📝</div>
+            <h1 className="text-2xl font-bold mb-1" style={{ color: '#0f0f0f', fontFamily: 'Georgia, serif' }}>
+              {exam.title}
+            </h1>
+            <p className="text-sm mb-1" style={{ color: '#8a8070' }}>
+              Course: {exam.courseTitle}
+            </p>
+            <div className="flex justify-center mb-6">
+              <span
+                className="px-2.5 py-1 rounded-md text-xs font-semibold"
+                style={{ backgroundColor: '#fef3dc', color: '#b87c10' }}
+              >
+                {difficulty.label}
+              </span>
             </div>
-            <div className="p-3 rounded-xl bg-surface-50">
-              <div className="text-lg font-bold text-surface-900">{exam.duration}m</div>
-              <div className="text-xs text-surface-400">Time Limit</div>
-            </div>
-            <div className="p-3 rounded-xl bg-surface-50">
-              <div className="text-lg font-bold text-surface-900">{exam.passingScore}%</div>
-              <div className="text-xs text-surface-400">Passing</div>
-            </div>
-          </div>
 
-          <div className="bg-amber-50 rounded-xl p-4 mb-6 text-left">
-            <div className="flex items-start gap-2">
-              <AlertTriangle size={16} className="text-amber-600 mt-0.5" />
-              <div className="text-sm text-amber-700">
-                <p className="font-medium mb-1">Before you begin:</p>
-                <ul className="space-y-1 text-xs">
-                  <li>Ensure a stable internet connection</li>
-                  <li>You can navigate between questions freely</li>
-                  <li>Review all answers before submitting</li>
-                </ul>
+            <div className="grid grid-cols-3 gap-4 mb-8 max-w-sm mx-auto">
+              {[
+                { value: questions.length, label: 'Questions' },
+                { value: `${exam.duration}m`, label: 'Time Limit' },
+                { value: `${exam.passingScore}%`, label: 'Passing' },
+              ].map((stat) => (
+                <div key={stat.label} className="p-3 rounded-xl" style={{ backgroundColor: '#faf8f4' }}>
+                  <div className="text-lg font-bold" style={{ color: '#0f0f0f', fontFamily: 'Georgia, serif' }}>
+                    {stat.value}
+                  </div>
+                  <div className="text-[10px] uppercase tracking-wider" style={{ color: '#8a8070' }}>
+                    {stat.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div
+              className="rounded-xl p-4 mb-6 text-left"
+              style={{ backgroundColor: '#fef3dc' }}
+            >
+              <div className="flex items-start gap-2">
+                <AlertTriangle size={16} style={{ color: '#b87c10', marginTop: 2 }} />
+                <div className="text-sm" style={{ color: '#b87c10' }}>
+                  <p className="font-medium mb-1">Before you begin:</p>
+                  <ul className="space-y-1 text-xs">
+                    <li>Ensure a stable internet connection</li>
+                    <li>You can navigate between questions freely</li>
+                    <li>Review all answers before submitting</li>
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
 
-          <Button size="lg" onClick={startExam}>
-            Start Exam
-          </Button>
-        </motion.div>
+            <button
+              onClick={startExam}
+              className="px-8 py-3 rounded-lg text-sm font-semibold transition-opacity hover:opacity-90"
+              style={{ backgroundColor: '#e8a020', color: '#0f0f0f' }}
+            >
+              Start Exam
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
 
   // Active exam
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-lg font-semibold text-surface-900">{exam.title}</h1>
-          <p className="text-sm text-surface-400">Certification Exam</p>
+    <div style={{ backgroundColor: '#faf8f4', minHeight: '100vh' }}>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-lg font-bold" style={{ color: '#0f0f0f', fontFamily: 'Georgia, serif' }}>
+              {exam.title}
+            </h1>
+            <p className="text-xs" style={{ color: '#8a8070' }}>Certification Exam</p>
+          </div>
+          <div
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium"
+            style={{ backgroundColor: '#f2ede4', color: '#0f0f0f' }}
+          >
+            <Clock size={14} />
+            {formatTime(timeElapsed)}
+          </div>
         </div>
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-50 text-sm font-medium text-surface-600">
-          <Clock size={14} />
-          {formatTime(timeElapsed)}
-        </div>
-      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <div className="lg:col-span-3">
-          <div className="bg-white rounded-2xl border border-surface-100 shadow-card p-6 sm:p-8">
-            {currentQuestion && (
-              <ExamQuestion
-                question={currentQuestion}
-                selectedOptionId={answers[currentQuestion.id]}
-                onSelect={(optionId) => answerQuestion(currentQuestion.id, optionId)}
-              />
-            )}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="lg:col-span-3">
+            <div
+              className="rounded-xl p-6 sm:p-8"
+              style={{ backgroundColor: '#ffffff', border: '1px solid #ddd8cc' }}
+            >
+              {currentQuestion && (
+                <ExamQuestion
+                  question={currentQuestion}
+                  selectedOptionId={answers[currentQuestion.id]}
+                  onSelect={(optionId) => answerQuestion(currentQuestion.id, optionId)}
+                />
+              )}
 
-            <div className="flex items-center justify-between mt-8 pt-6 border-t border-surface-100">
-              <Button variant="ghost" onClick={prevQuestion} disabled={currentQuestionIndex === 0}>
-                Previous
-              </Button>
-              <div className="flex gap-2">
-                {currentQuestionIndex === questions.length - 1 ? (
-                  <Button onClick={() => setShowSubmitModal(true)}>Submit Exam</Button>
-                ) : (
-                  <Button onClick={nextQuestion}>Next</Button>
-                )}
+              <div
+                className="flex items-center justify-between mt-8 pt-6"
+                style={{ borderTop: '1px solid #ddd8cc' }}
+              >
+                <button
+                  onClick={prevQuestion}
+                  disabled={currentQuestionIndex === 0}
+                  className="px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-40"
+                  style={{ backgroundColor: '#f2ede4', color: '#0f0f0f' }}
+                >
+                  Previous
+                </button>
+                <div className="flex gap-2">
+                  {currentQuestionIndex === questions.length - 1 ? (
+                    <button
+                      onClick={() => setShowSubmitModal(true)}
+                      className="px-4 py-2 rounded-lg text-sm font-semibold transition-opacity hover:opacity-90"
+                      style={{ backgroundColor: '#e8a020', color: '#0f0f0f' }}
+                    >
+                      Submit Exam
+                    </button>
+                  ) : (
+                    <button
+                      onClick={nextQuestion}
+                      className="px-4 py-2 rounded-lg text-sm font-semibold transition-opacity hover:opacity-90"
+                      style={{ backgroundColor: '#0f0f0f', color: '#faf8f4' }}
+                    >
+                      Next
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="lg:col-span-1">
-          <div className="bg-white rounded-2xl border border-surface-100 shadow-card p-4 sticky top-24">
-            <ExamProgress
-              total={questions.length}
-              current={currentQuestionIndex}
-              answered={answeredCount}
-              onGoTo={goToQuestion}
-              answers={answers}
-              questionIds={questions.map((q) => q.id)}
-            />
-          </div>
-        </div>
-      </div>
-
-      <Modal isOpen={showSubmitModal} onClose={() => setShowSubmitModal(false)} title="Submit Exam?" size="sm">
-        <div className="space-y-4">
-          <p className="text-sm text-surface-600">
-            You have answered <strong>{answeredCount}</strong> out of <strong>{questions.length}</strong> questions.
-          </p>
-          {answeredCount < questions.length && (
-            <div className="p-3 rounded-xl bg-amber-50 text-sm text-amber-700">
-              {questions.length - answeredCount} unanswered question(s) will be marked incorrect.
+          <div className="lg:col-span-1">
+            <div
+              className="rounded-xl p-4 sticky top-20"
+              style={{ backgroundColor: '#ffffff', border: '1px solid #ddd8cc' }}
+            >
+              <ExamProgress
+                total={questions.length}
+                current={currentQuestionIndex}
+                answered={answeredCount}
+                onGoTo={goToQuestion}
+                answers={answers}
+                questionIds={questions.map((q) => q.id)}
+              />
             </div>
-          )}
-          <div className="flex gap-3 justify-end">
-            <Button variant="secondary" onClick={() => setShowSubmitModal(false)}>Review</Button>
-            <Button onClick={() => {
-              setShowSubmitModal(false);
-              submitExam(exam.courseId, exam.passingScore);
-            }}>
-              Submit
-            </Button>
           </div>
         </div>
-      </Modal>
+
+        <Modal isOpen={showSubmitModal} onClose={() => setShowSubmitModal(false)} title="Submit Exam?" size="sm">
+          <div className="space-y-4">
+            <p className="text-sm" style={{ color: '#4d4840' }}>
+              You have answered <strong>{answeredCount}</strong> out of <strong>{questions.length}</strong> questions.
+            </p>
+            {answeredCount < questions.length && (
+              <div className="p-3 rounded-lg text-sm" style={{ backgroundColor: '#fef3dc', color: '#b87c10' }}>
+                {questions.length - answeredCount} unanswered question(s) will be marked incorrect.
+              </div>
+            )}
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => setShowSubmitModal(false)}
+                className="px-4 py-2 rounded-lg text-sm font-medium"
+                style={{ backgroundColor: '#f2ede4', color: '#0f0f0f' }}
+              >
+                Review
+              </button>
+              <button
+                onClick={() => {
+                  setShowSubmitModal(false);
+                  submitExam(exam.courseId, exam.passingScore);
+                }}
+                className="px-4 py-2 rounded-lg text-sm font-semibold transition-opacity hover:opacity-90"
+                style={{ backgroundColor: '#e8a020', color: '#0f0f0f' }}
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </Modal>
+      </div>
     </div>
   );
 }

@@ -5,19 +5,19 @@ export default {
     extend: {
       colors: {
         brand: {
-          50: '#f0f4ff', 100: '#dbe4ff', 200: '#bac8ff', 300: '#91a7ff',
-          400: '#748ffc', 500: '#5c7cfa', 600: '#4c6ef5', 700: '#4263eb',
-          800: '#3b5bdb', 900: '#364fc7',
+          50: '#fef3dc', 100: '#fde4a8', 200: '#fbd174', 300: '#f5bc40',
+          400: '#e8a020', 500: '#d49018', 600: '#b87c10', 700: '#8a5d0c',
+          800: '#5c3e08', 900: '#2e1f04',
         },
         surface: {
-          0: '#ffffff', 50: '#f8f9fa', 100: '#f1f3f5', 200: '#e9ecef',
-          300: '#dee2e6', 400: '#ced4da', 500: '#adb5bd', 600: '#868e96',
-          700: '#495057', 800: '#343a40', 900: '#212529',
+          50: '#faf8f4', 100: '#f2ede4', 200: '#e5ded2',
+          300: '#ddd8cc', 400: '#b5ae9f', 500: '#8a8070', 600: '#6b6355',
+          700: '#4d4840', 800: '#2e2b26', 900: '#0f0f0f',
         }
       },
       fontFamily: {
-        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
-        display: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        sans: ['DM Sans', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        display: ['Noto Serif SC', 'serif'],
       },
       boxShadow: {
         'card': '0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06)',

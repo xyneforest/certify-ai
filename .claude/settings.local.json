@@ -16,7 +16,10 @@
       "Bash(npm run:*)",
       "Bash(curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh)",
       "Bash(bash)",
-      "mcp__Claude_Preview__preview_start"
+      "mcp__Claude_Preview__preview_start",
+      "WebFetch(domain:claude.ai)",
+      "Bash(curl -sL \"https://claude.ai/public/artifacts/164adeec-b504-4b5a-9d1b-df6587cdce5f\" -o /tmp/artifact.html)",
+      "Read(//tmp/**)"
     ]
   }
 }

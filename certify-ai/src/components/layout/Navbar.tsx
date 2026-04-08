@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Award, User, LogOut, BookOpen, FileQuestion, HelpCircle } from 'lucide-react';
+import { Menu, X, LogOut } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
-import { Button } from '../ui';
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -12,9 +11,9 @@ export function Navbar() {
 
   const links = [
     { to: '/', label: 'Home' },
-    { to: '/courses', label: 'Course', icon: <BookOpen size={14} /> },
-    { to: '/exams', label: 'Exam', icon: <FileQuestion size={14} /> },
-    { to: '/fa', label: 'F&A', icon: <HelpCircle size={14} /> },
+    { to: '/courses', label: 'Course' },
+    { to: '/exams', label: 'Exam' },
+    { to: '/fa', label: 'F&A' },
   ];
 
   const isActive = (path: string) => {
@@ -23,15 +22,12 @@ export function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-surface-100">
+    <nav className="sticky top-0 z-50 bg-[#faf8f4] border-b border-surface-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-lg gradient-brand flex items-center justify-center">
-              <Award size={18} className="text-white" />
-            </div>
-            <span className="font-bold text-lg text-surface-900 group-hover:text-brand-700 transition-colors">
-              CertifyAI
+        <div className="flex items-center justify-between h-[60px]">
+          <Link to="/" className="flex items-center group">
+            <span className="font-serif text-xl font-bold text-surface-900">
+              Certify<span className="text-brand-400">AI</span>
             </span>
           </Link>
 
@@ -41,13 +37,12 @@ export function Navbar() {
                 key={link.to}
                 to={link.to}
                 className={`
-                  flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200
+                  px-4 py-2 text-[0.875rem] font-medium transition-all duration-200 border-b-2
                   ${isActive(link.to)
-                    ? 'bg-surface-900 text-white'
-                    : 'text-surface-600 hover:text-surface-900 hover:bg-surface-50'}
+                    ? 'text-surface-900 border-brand-400'
+                    : 'text-surface-500 border-transparent hover:text-surface-900'}
                 `}
               >
-                {link.icon}
                 {link.label}
               </Link>
             ))}
@@ -58,37 +53,33 @@ export function Navbar() {
               <>
                 <Link
                   to="/dashboard"
-                  className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-surface-600 hover:text-surface-900 hover:bg-surface-50 transition-all"
+                  className="flex items-center gap-2 px-3 py-2 text-[0.875rem] font-medium text-surface-600 hover:text-surface-900 transition-all"
                 >
-                  <img
-                    src={user?.avatar}
-                    alt={user?.name}
-                    className="w-6 h-6 rounded-full object-cover"
-                  />
+                  <div className="w-7 h-7 rounded-full bg-brand-400 flex items-center justify-center text-white text-xs font-bold">
+                    {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                  </div>
                   {user?.name}
                 </Link>
                 <button
                   onClick={logout}
-                  className="p-2 rounded-lg text-surface-400 hover:text-surface-600 hover:bg-surface-50 transition-all"
+                  className="p-2 rounded-lg text-surface-400 hover:text-surface-600 transition-all"
                 >
                   <LogOut size={18} />
                 </button>
               </>
             ) : (
-              <>
-                <Link to="/login">
-                  <Button variant="ghost" size="sm">Log in</Button>
-                </Link>
-                <Link to="/login?mode=signup">
-                  <Button size="sm">Get Started</Button>
-                </Link>
-              </>
+              <Link
+                to="/login"
+                className="text-[0.875rem] font-medium text-surface-500 hover:text-surface-900 transition-colors"
+              >
+                Sign In
+              </Link>
             )}
           </div>
 
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2 rounded-lg text-surface-600 hover:bg-surface-50"
+            className="md:hidden p-2 rounded-lg text-surface-600 hover:bg-surface-100"
           >
             {mobileOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -101,7 +92,7 @@ export function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-t border-surface-100 bg-white"
+            className="md:hidden border-t border-surface-300 bg-[#faf8f4]"
           >
             <div className="px-4 py-3 space-y-1">
               {links.map((link) => (
@@ -110,36 +101,43 @@ export function Navbar() {
                   to={link.to}
                   onClick={() => setMobileOpen(false)}
                   className={`
-                    flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium transition-all
-                    ${isActive(link.to) ? 'bg-surface-900 text-white' : 'text-surface-600 hover:bg-surface-50'}
+                    block px-3 py-2.5 text-[0.875rem] font-medium transition-all rounded-lg
+                    ${isActive(link.to)
+                      ? 'text-surface-900 bg-surface-100 border-l-2 border-brand-400'
+                      : 'text-surface-500 hover:text-surface-900 hover:bg-surface-100'}
                   `}
                 >
-                  {link.icon}
                   {link.label}
                 </Link>
               ))}
-              <div className="pt-2 border-t border-surface-100">
+              <div className="pt-2 border-t border-surface-300">
                 {isAuthenticated ? (
                   <>
                     <Link
                       to="/dashboard"
                       onClick={() => setMobileOpen(false)}
-                      className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-surface-600 hover:bg-surface-50"
+                      className="flex items-center gap-2 px-3 py-2.5 text-[0.875rem] font-medium text-surface-600 hover:bg-surface-100 rounded-lg"
                     >
-                      <User size={16} />
+                      <div className="w-6 h-6 rounded-full bg-brand-400 flex items-center justify-center text-white text-xs font-bold">
+                        {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                      </div>
                       Dashboard
                     </Link>
                     <button
                       onClick={() => { logout(); setMobileOpen(false); }}
-                      className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-surface-600 hover:bg-surface-50 w-full text-left"
+                      className="flex items-center gap-2 px-3 py-2.5 text-[0.875rem] font-medium text-surface-600 hover:bg-surface-100 w-full text-left rounded-lg"
                     >
                       <LogOut size={16} />
                       Log out
                     </button>
                   </>
                 ) : (
-                  <Link to="/login" onClick={() => setMobileOpen(false)}>
-                    <Button className="w-full" size="sm">Get Started</Button>
+                  <Link
+                    to="/login"
+                    onClick={() => setMobileOpen(false)}
+                    className="block px-3 py-2.5 text-[0.875rem] font-medium text-surface-500 hover:text-surface-900"
+                  >
+                    Sign In
                   </Link>
                 )}
               </div>
