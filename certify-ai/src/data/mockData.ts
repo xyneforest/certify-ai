@@ -453,6 +453,7 @@ export const mockUser: User = {
   name: 'Alex Morgan',
   email: 'alex@example.com',
   avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face',
+  role: 'student',
   joinedAt: '2024-01-01',
   certifications: [
     { certificationId: '1', earnedAt: '2024-06-15', score: 85, certificateUrl: '#' },
@@ -470,4 +471,15 @@ export const mockUser: User = {
       },
     },
   ],
+};
+
+export const mockTeacher: User = {
+  id: 't1',
+  name: 'Dr. James Harrison',
+  email: 'james@certifyai.com',
+  avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&h=100&fit=crop&crop=face',
+  role: 'teacher',
+  joinedAt: '2023-06-01',
+  certifications: [],
+  examAttempts: [],
 };

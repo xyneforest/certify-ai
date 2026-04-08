@@ -24,12 +24,14 @@ export function Login() {
     setLoading(true);
     let success: boolean;
     if (isSignup) {
-      success = await signup(name, email, password);
+      success = await signup(name, email, password, role);
     } else {
-      success = await login(email, password);
+      success = await login(email, password, role);
     }
     setLoading(false);
-    if (success) navigate(redirect);
+    if (success) {
+      navigate(role === 'teacher' ? '/teacher' : redirect);
+    }
   };
 
   return (

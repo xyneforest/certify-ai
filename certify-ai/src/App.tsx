@@ -9,6 +9,7 @@ import { ExamDetail } from './pages/ExamDetail';
 import { FAQ } from './pages/FAQ';
 import { Login } from './pages/Login';
 import { Dashboard } from './pages/Dashboard';
+import { TeacherDashboard } from './pages/TeacherDashboard';
 
 function App() {
   return (
@@ -16,6 +17,9 @@ function App() {
       <Routes>
         {/* Learn page - full screen, no footer */}
         <Route path="courses/:id/learn" element={<Learn />} />
+
+        {/* Teacher dashboard - full screen with sidebar */}
+        <Route path="teacher" element={<TeacherDashboard />} />
 
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
