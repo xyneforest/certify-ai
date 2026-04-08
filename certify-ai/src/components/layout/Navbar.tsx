@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Award, User, LogOut, Sparkles } from 'lucide-react';
+import { Menu, X, Award, User, LogOut, BookOpen, FileQuestion, HelpCircle } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { Button } from '../ui';
 
@@ -11,11 +11,16 @@ export function Navbar() {
   const location = useLocation();
 
   const links = [
-    { to: '/explore', label: 'Explore' },
-    { to: '/ai-generate', label: 'AI Generate', icon: <Sparkles size={14} /> },
+    { to: '/', label: 'Home' },
+    { to: '/courses', label: 'Course', icon: <BookOpen size={14} /> },
+    { to: '/exams', label: 'Exam', icon: <FileQuestion size={14} /> },
+    { to: '/fa', label: 'F&A', icon: <HelpCircle size={14} /> },
   ];
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => {
+    if (path === '/') return location.pathname === '/';
+    return location.pathname.startsWith(path);
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-surface-100">

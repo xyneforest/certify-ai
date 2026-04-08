@@ -1,29 +1,15 @@
-import { Search, SlidersHorizontal } from 'lucide-react';
+import { SlidersHorizontal } from 'lucide-react';
 import { Category, Difficulty, CATEGORIES, DIFFICULTIES } from '../../types';
 import { useCertStore } from '../../store/certStore';
 
 export function FilterBar() {
   const {
-    searchQuery, setSearchQuery,
     selectedCategory, setCategory,
     selectedDifficulty, setDifficulty,
   } = useCertStore();
 
   return (
-    <div className="space-y-4">
-      <div className="relative">
-        <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-surface-400" />
-        <input
-          type="text"
-          placeholder="Search certifications..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-surface-200 bg-white text-sm
-            placeholder-surface-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500
-            transition-all duration-200"
-        />
-      </div>
-
+    <div className="space-y-3">
       <div className="flex flex-wrap gap-2">
         <div className="flex items-center gap-1.5 text-xs text-surface-500 mr-1">
           <SlidersHorizontal size={14} />

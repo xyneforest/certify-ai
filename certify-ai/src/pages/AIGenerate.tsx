@@ -4,14 +4,14 @@ import { motion } from 'framer-motion';
 import { Sparkles, BookOpen, Brain, Wand2, ArrowRight, CheckCircle } from 'lucide-react';
 import { Button, Input, Card } from '../components/ui';
 import { generateCourse, generateQuiz } from '../api/ai';
-import { Certification, Question, Difficulty, DIFFICULTIES } from '../types';
+import { Course, Question, Difficulty, DIFFICULTIES } from '../types';
 
 export function AIGenerate() {
   const [topic, setTopic] = useState('');
   const [difficulty, setDifficulty] = useState<Difficulty>('intermediate');
   const [, setGenerating] = useState(false);
   const [step, setStep] = useState<'input' | 'generating' | 'preview'>('input');
-  const [generatedCourse, setGeneratedCourse] = useState<Partial<Certification> | null>(null);
+  const [generatedCourse, setGeneratedCourse] = useState<Partial<Course> | null>(null);
   const [generatedQuestions, setGeneratedQuestions] = useState<Question[]>([]);
   const navigate = useNavigate();
 
@@ -121,7 +121,7 @@ export function AIGenerate() {
                 disabled={!topic.trim()}
               >
                 <Wand2 size={18} className="mr-2" />
-                Generate Certification
+                Generate Course
               </Button>
             </div>
           </Card>

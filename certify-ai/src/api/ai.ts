@@ -1,11 +1,11 @@
-import { Certification, Question } from '../types';
+import { Course, Question } from '../types';
 import { AI_PROMPTS } from './prompts';
 
 // Simulated AI generation - replace with actual API calls to Claude/OpenAI
 export async function generateCourse(
   topic: string,
   difficulty: string
-): Promise<Partial<Certification>> {
+): Promise<Partial<Course>> {
   // In production, send AI_PROMPTS.generateCourse(topic, difficulty) to your AI API
   console.log('AI Prompt:', AI_PROMPTS.generateCourse(topic, difficulty));
 
@@ -14,11 +14,11 @@ export async function generateCourse(
   const id = `ai-${Date.now()}`;
   return {
     id,
-    title: `${topic} Professional Certification`,
+    title: `${topic} Professional Course`,
     slug: topic.toLowerCase().replace(/\s+/g, '-') + '-cert',
     description: `Comprehensive certification covering all aspects of ${topic}. This AI-generated course provides in-depth coverage of key concepts, practical applications, and industry best practices at the ${difficulty} level.`,
     shortDescription: `Master ${topic} with this AI-generated certification course.`,
-    category: 'technology',
+    category: 'business-management',
     difficulty: difficulty as any,
     duration: 60,
     questionCount: 20,

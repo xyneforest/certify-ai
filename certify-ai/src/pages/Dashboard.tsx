@@ -91,7 +91,7 @@ export function Dashboard() {
             <div className="bg-white rounded-xl border border-surface-100 p-8 text-center">
               <Award size={32} className="mx-auto mb-3 text-surface-300" />
               <p className="text-surface-500 mb-4">No certifications earned yet</p>
-              <Link to="/explore">
+              <Link to="/courses">
                 <Button variant="secondary" size="sm">Browse Certifications</Button>
               </Link>
             </div>
@@ -156,7 +156,7 @@ export function Dashboard() {
             <h3 className="text-lg font-semibold">Continue your learning journey</h3>
             <p className="text-white/70 text-sm">Explore new certifications or retake exams to improve your scores.</p>
           </div>
-          <Link to="/explore">
+          <Link to="/courses">
             <Button variant="secondary" className="bg-white text-surface-900 hover:bg-white/90 border-0 whitespace-nowrap">
               Explore More <ArrowRight size={16} className="ml-1" />
             </Button>

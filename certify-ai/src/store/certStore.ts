@@ -1,22 +1,22 @@
 import { create } from 'zustand';
-import { Certification, Category, Difficulty } from '../types';
-import { certifications } from '../data/mockData';
+import { Course, Category, Difficulty } from '../types';
+import { courses } from '../data/mockData';
 
 interface CertState {
-  certifications: Certification[];
-  filteredCerts: Certification[];
+  certifications: Course[];
+  filteredCerts: Course[];
   searchQuery: string;
   selectedCategory: Category | 'all';
   selectedDifficulty: Difficulty | 'all';
   setSearchQuery: (q: string) => void;
   setCategory: (c: Category | 'all') => void;
   setDifficulty: (d: Difficulty | 'all') => void;
-  getCertBySlug: (slug: string) => Certification | undefined;
-  getCertById: (id: string) => Certification | undefined;
+  getCertBySlug: (slug: string) => Course | undefined;
+  getCertById: (id: string) => Course | undefined;
 }
 
 const filterCerts = (
-  certs: Certification[],
+  certs: Course[],
   query: string,
   category: Category | 'all',
   difficulty: Difficulty | 'all'
@@ -33,26 +33,26 @@ const filterCerts = (
 };
 
 export const useCertStore = create<CertState>((set, get) => ({
-  certifications,
-  filteredCerts: certifications,
+  certifications: courses,
+  filteredCerts: courses,
   searchQuery: '',
   selectedCategory: 'all',
   selectedDifficulty: 'all',
   setSearchQuery: (q) => {
     set({ searchQuery: q });
     const { selectedCategory, selectedDifficulty } = get();
-    set({ filteredCerts: filterCerts(certifications, q, selectedCategory, selectedDifficulty) });
+    set({ filteredCerts: filterCerts(courses, q, selectedCategory, selectedDifficulty) });
   },
   setCategory: (c) => {
     set({ selectedCategory: c });
     const { searchQuery, selectedDifficulty } = get();
-    set({ filteredCerts: filterCerts(certifications, searchQuery, c, selectedDifficulty) });
+    set({ filteredCerts: filterCerts(courses, searchQuery, c, selectedDifficulty) });
   },
   setDifficulty: (d) => {
     set({ selectedDifficulty: d });
     const { searchQuery, selectedCategory } = get();
-    set({ filteredCerts: filterCerts(certifications, searchQuery, selectedCategory, d) });
+    set({ filteredCerts: filterCerts(courses, searchQuery, selectedCategory, d) });
   },
-  getCertBySlug: (slug) => certifications.find((c) => c.slug === slug),
-  getCertById: (id) => certifications.find((c) => c.id === id),
+  getCertBySlug: (slug) => courses.find((c) => c.slug === slug),
+  getCertById: (id) => courses.find((c) => c.id === id),
 }));

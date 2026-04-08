@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Clock, Users, Star, ArrowRight } from 'lucide-react';
-import { Certification, CATEGORIES, DIFFICULTIES } from '../../types';
+import { Course, CATEGORIES, DIFFICULTIES } from '../../types';
 import { Badge } from '../ui';
 
 interface CertCardProps {
-  cert: Certification;
+  cert: Course;
   index?: number;
 }
 
@@ -19,7 +19,7 @@ export function CertCard({ cert, index = 0 }: CertCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.08 }}
     >
-      <Link to={`/cert/${cert.slug}`} className="group block">
+      <Link to={`/courses/${cert.id}`} className="group block">
         <div className="bg-white rounded-2xl border border-surface-100 shadow-card overflow-hidden transition-all duration-300 group-hover:shadow-card-hover group-hover:-translate-y-1">
           <div className="relative h-48 overflow-hidden">
             <img

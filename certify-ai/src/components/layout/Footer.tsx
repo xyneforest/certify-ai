@@ -21,9 +21,9 @@ export function Footer() {
           <div>
             <h3 className="text-sm font-semibold text-surface-900 mb-3">Platform</h3>
             <ul className="space-y-2">
-              <li><Link to="/explore" className="text-sm text-surface-500 hover:text-surface-900 transition-colors">Explore Certifications</Link></li>
-              <li><Link to="/ai-generate" className="text-sm text-surface-500 hover:text-surface-900 transition-colors">AI Course Generator</Link></li>
-              <li><Link to="/dashboard" className="text-sm text-surface-500 hover:text-surface-900 transition-colors">Dashboard</Link></li>
+              <li><Link to="/courses" className="text-sm text-surface-500 hover:text-surface-900 transition-colors">Courses</Link></li>
+              <li><Link to="/exams" className="text-sm text-surface-500 hover:text-surface-900 transition-colors">Exams</Link></li>
+              <li><Link to="/fa" className="text-sm text-surface-500 hover:text-surface-900 transition-colors">F&A</Link></li>
             </ul>
           </div>
 
